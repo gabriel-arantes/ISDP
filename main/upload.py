@@ -1,7 +1,4 @@
-from selenium import webdriver
-import time
 from functions import *
-from selenium.webdriver.common.action_chains import ActionChains
 
 driver = webdriver.Chrome(executable_path="C:\Drivers\chromedriver.exe")
 
@@ -20,7 +17,16 @@ elements = driver.find_elements_by_xpath(
             "//a[contains(@onclick, 'isd.rp.common.upload(')]")
 homepage = driver.window_handles[0]
 sitewindows = []
+uploadwindows = []
 i = 0
+sitesnames= driver.find_elements_by_xpath("//a[@class='jalor-link-btn' and contains(@onclick,'7')]")
+nomesdascaralha = []
+lista = []
+
+for sitename in sitesnames:
+    nomedacaralha = sitename.text
+    nomesdascaralha.append(nomedacaralha)
+    lista = [e[2:] for e in nomesdascaralha]
 
 for element in elements:
     if i <= 0:
@@ -28,21 +34,21 @@ for element in elements:
         element.click()
     else:
         element.click()
-    time.sleep(8)
-    element = driver.find_element_by_xpath("//*[@id='taskFileManageGrdView']//div[1]//p[1]//label")
-    print(element)
-
-    #// * [ @ id = 'taskFileManageGrdView'] // div[1] // p[4] // img
-    #")
-
-    #
-    #// a[ @ onclick = 'JsTaskFileManage.TaskFileManage.uploadFileData('
-    #6
-    #'');'
-    #scrollToElement(element, driver)
+    time.sleep(2)
     sitewindows.append(driver.window_handles[1 + i])
-    time.sleep(2)
-    driver.find_element_by_xpath("//td[@_col = '1'//a[@onclick='JsTaskFileManage.TaskFileManage.uploadFileData('7');']").click()
-    time.sleep(2)
     driver.switch_to.window(homepage)
     i = i + 1
+
+for sitewindow in sitewindows:
+    driver.switch_to.window(sitewindow)
+    capiroto = driver.find_element_by_id('taskFileManageUnstructGrdOuter')
+    scrollToElement(capiroto, driver)
+    FDP = driver.find_element_by_xpath("//a[contains(@onclick,'7')]")
+    FDP.click()
+    uploadwindows.append(driver.window_handles[1 + i])
+    i = i + 1
+    time.sleep(2)
+
+for uploadwindow in uploadwindows:
+    driver.switch_to.window(uploadwindow)
+driver.find_element_by_class_name("plupload_droptext").sendKeys("D://upload/*" + lista[i] + "*")
