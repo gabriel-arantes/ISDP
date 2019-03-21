@@ -1,7 +1,4 @@
-from selenium import webdriver
-import time
 from functions import *
-from selenium.webdriver.common.action_chains import ActionChains
 
 driver = webdriver.Chrome(executable_path="C:\Drivers\chromedriver.exe")
 
@@ -9,12 +6,14 @@ openISDP(driver)
 site_login("D:/csv/login.csv", driver)
 chooseProject(driver)
 searchLista("D:/csv/lista.csv", driver)
-scrollToElement("//div[@title='HOL DOCUMENTAÇÃO CHECKLIST  WL']", driver)
+milestone = driver.find_element_by_xpath("//div[@title='HOL DOCUMENTAÇÃO CHECKLIST  WL']")
+scrollToElement(milestone, driver)
 
 elements = driver.find_elements_by_xpath(
             "//div[@class='webix_ss_center_scroll']//div[@class='webix_column dt_header_tool']"
             "//span[@class='rp-blankIcon']"
             "//a[contains(@onclick, 'isd.rp.common.viewAttachment(')]")
+
 homepage = driver.window_handles[0]
 sitewindows = []
 i = 0
