@@ -7,7 +7,24 @@ site_login("D:/csv/login.csv", driver)
 chooseProject(driver)
 searchLista("D:/csv/lista.csv", driver)
 milestone = driver.find_element_by_xpath("//div[@title='HOL DOCUMENTAÇÃO CHECKLIST  WL']")
-scrollToElement(milestone, driver)
+try:
+    element = WebDriverWait(driver, 15).until(
+        EC.presence_of_element_located((By.XPATH, "//div[@title='HOL DOCUMENTAÇÃO CHECKLIST  WL']"))
+    )
+except:
+    print("Problemas de conexão")
+
+actions = ActionChains(driver)
+actions.move_to_element(milestone).perform()
+
+try:
+    element = WebDriverWait(driver, 15).until(
+        EC.presence_of_element_located((By.XPATH, "//div[@class='webix_ss_center_scroll']//div[@class='webix_column dt_header_tool']"
+            "//span[@class='rp-blankIcon']"
+            "//a[contains(@onclick, 'isd.rp.common.viewAttachment(')]"))
+    )
+except:
+    print("Problemas de conexão")
 
 elements = driver.find_elements_by_xpath(
             "//div[@class='webix_ss_center_scroll']//div[@class='webix_column dt_header_tool']"
@@ -16,19 +33,33 @@ elements = driver.find_elements_by_xpath(
 
 homepage = driver.window_handles[0]
 sitewindows = []
-i = 0
+i = 1
 
 for element in elements:
-    if i <= 0:
+    if i <= 1:
         element.click()
         element.click()
     else:
         element.click()
-    time.sleep(3)
+    try:
+        element = WebDriverWait(driver, 15).until(
+            EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Checklist"))
+        )
+    except:
+        print("Problemas de conexão")
+
+
     driver.find_element_by_partial_link_text("Checklist").click()
-    time.sleep(2)
-    sitewindows.append(driver.window_handles[1 + i])
+    time.sleep(3)
+    sitewindows.append(driver.window_handles[i])
     driver.switch_to.window(homepage)
+    try:
+        element = WebDriverWait(driver, 15).until(
+            EC.presence_of_element_located((By.ID, "close"))
+        )
+    except:
+        print("Problemas de conexão")
+
     driver.find_element_by_id("close").click()
     i = i + 1
 
@@ -40,4 +71,4 @@ for sitewindow in sitewindows:
 
     driver.find_element_by_xpath("//label[contains(@onclick, 'downloadDocumentSubmit(')]").click()
     time.sleep(2)
-    driver.close()
+    driver.close()      
