@@ -71,4 +71,5 @@ for sitewindow in sitewindows:
 
     driver.find_element_by_xpath("//label[contains(@onclick, 'downloadDocumentSubmit(')]").click()
     time.sleep(2)
-    driver.close()      
+    driver.close()
+ctypes.windll.user32.MessageBoxW(0, "Download Completo.", "Voilà", 0)
