@@ -5,7 +5,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
+import ctypes  # An included library with Python install.
 
 def openISDP(driver):
     driver.get('http://app-br.huawei.com/sdcp/portalNew#!isd/webix/rolloutPlanManagment.html')
