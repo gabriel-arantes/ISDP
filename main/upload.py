@@ -5,6 +5,8 @@ from os import listdir
 from os.path import isfile, join
 from pynput.keyboard import Key, Controller
 
+
+
 driver = webdriver.Chrome(executable_path="C:\\Drivers\\chromedriver.exe")
 keyboard = Controller()
 
@@ -107,19 +109,22 @@ for sitewindow in sitewindows:
 
     try:
         element = WebDriverWait(driver, 15).until(
-            EC.element_to_be_clickable(By.ID, "callBackButton"))
+            EC.element_to_be_clickable((By.ID, "callBackButton"))
+        )
     except:
-        print("Problemas de conexão")
+        print("")
 
     time.sleep(2)
     driver.find_element_by_id("callBackButton").click()
 
     try:
         element = WebDriverWait(driver, 15).until(
-            EC.element_to_be_clickable(By.XPATH, buttonxpath))
+            EC.element_to_be_clickable((By.XPATH, buttonxpath))
+        )
     except:
-        print("Fechando o processo")
+        print("")
 
     driver.find_element_by_xpath(buttonxpath).click()
     time.sleep(1)
     driver.find_element_by_id("callBackButton").click()
+ctypes.windll.user32.MessageBoxW(0, "Upload Completo.", "Voilà", 0)
