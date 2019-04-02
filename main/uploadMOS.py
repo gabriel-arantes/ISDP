@@ -1,18 +1,17 @@
-from functions import *
 import pyperclip
 from keyboard import press, release
 from os import listdir
 from os.path import isfile, join
 from pynput.keyboard import Controller
+from functions import *
 
-
-driver = webdriver.Chrome(executable_path="C:\\Drivers\\chromedriver.exe")
+driver = webdriver.Chrome(executable_path="D:\\ISDP\\chromedriver.exe")
 keyboard = Controller()
 
 openISDP(driver)
-site_login("D:/csv/login.csv", driver)
+site_login("D:/ISDP/csv/login.csv", driver)
 chooseProject(driver)
-searchLista("D:/csv/lista.csv", driver)
+searchLista("D:/ISDP/csv/lista.csv", driver, "rpSearchKey", "aGlobalSearch")
 
 try:
     element = WebDriverWait(driver, 15).until(
@@ -62,7 +61,7 @@ for element in elements:
 for sitewindow in sitewindows:
     w = len(sitewindows)
     y = 1
-    filepath = "D:\\MOS\\"
+    filepath = "D:\\ISDP\\upload\\"
     name = lista[z]
     files = [f for f in listdir(filepath + name) if isfile(join(filepath + name, f))]
     driver.switch_to.window(sitewindow)
