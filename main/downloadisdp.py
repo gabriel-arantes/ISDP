@@ -1,11 +1,12 @@
 from functions import *
 
-driver = webdriver.Chrome(executable_path="C:\Drivers\chromedriver.exe")
+driver = webdriver.Chrome(executable_path="D:\\ISDP\\chromedriver.exe")
 
 openISDP(driver)
-site_login("D:/csv/login.csv", driver)
+time.sleep(2)
+site_login("D:/ISDP/csv/login.csv", driver)
 chooseProject(driver)
-searchLista("D:/csv/lista.csv", driver)
+searchLista("D:/ISDP/csv/lista.csv", driver, "rpSearchKey", "aGlobalSearch")
 milestone = driver.find_element_by_xpath("//div[@title='HOL DOCUMENTAÇÃO CHECKLIST  WL']")
 try:
     element = WebDriverWait(driver, 15).until(
