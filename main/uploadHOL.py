@@ -1,34 +1,33 @@
-from functions import *
 import pyperclip
 from keyboard import press, release
 from os import listdir
 from os.path import isfile, join
-from pynput.keyboard import Key, Controller
+from pynput.keyboard import Controller
+from functions import *
 
 
-
-driver = webdriver.Chrome(executable_path="C:\\Drivers\\chromedriver.exe")
+driver = webdriver.Chrome(executable_path="D:\\ISDP\\chromedriver.exe")
 keyboard = Controller()
 
 openISDP(driver)
-site_login("D:/csv/login.csv", driver)
+site_login("D:/ISDP/csv/login.csv", driver)
 chooseProject(driver)
-searchLista("D:/csv/lista.csv", driver)
+searchLista("D:/ISDP/csv/lista.csv", driver, "rpSearchKey", "aGlobalSearch")
 
 try:
     element = WebDriverWait(driver, 15).until(
-        EC.presence_of_element_located((By.XPATH, "//div[@title='HOL checklist + ETC Granite + Netwin']"))
+        EC.presence_of_element_located((By.XPATH, "//div[@title='HOL DOCUMENTAÇÃO CHECKLIST  WL']"))
     )
 except:
     print("Problemas de conexão")
 
-milestone = driver.find_element_by_xpath("//div[@title='HOL checklist + ETC Granite + Netwin']")
+milestone = driver.find_element_by_xpath("//div[@title='HOL DOCUMENTAÇÃO CHECKLIST  WL']")
 scrollToElement(milestone, driver)
 time.sleep(3)
 elements = driver.find_elements_by_xpath(
             "//div[@class='webix_ss_center_scroll']//div[@class='webix_column dt_header_tool']"
             "//span[@class='rp-blankIcon']"
-            "//a[contains(@onclick, 'isd.rp.common.upload(')]")
+            "//a[@title='Delivery Upload']")
 
 homepage = driver.window_handles[0]
 sitewindows = []
@@ -39,12 +38,19 @@ nomesdascaralha = []
 lista = []
 i = 0
 z = 0
+w = 0
 
 for sitename in sitesnames:
     nomedacaralha = sitename.text
     nomesdascaralha.append(nomedacaralha)
     lista = [e[2:] for e in nomesdascaralha]
 
+while len(elements) - len(sitesnames) > w:
+    elements.pop()
+    w = w + 1
+    print("ELEMENTS: ", len(elements))
+
+print("SITESNAMES: ", len(sitesnames))
 for element in elements:
     if i <= 0:
         element.click()
@@ -55,11 +61,13 @@ for element in elements:
     sitewindows.append(driver.window_handles[1 + i])
     driver.switch_to.window(homepage)
     i = i + 1
+    print("SITEWINDOWS: ", len(sitewindows))
+    print("I: ", i)
 
 for sitewindow in sitewindows:
     w = len(sitewindows)
     y = 1
-    filepath = "D:\\upload\\"
+    filepath = "D:\\ISDP\\upload\\"
     name = lista[z]
     files = [f for f in listdir(filepath + name) if isfile(join(filepath + name, f))]
     driver.switch_to.window(sitewindow)
@@ -95,7 +103,7 @@ for sitewindow in sitewindows:
         driver.switch_to.window(sitewindow)
         y = y + 1
 
-    WebDriverWait(driver, 20).until(EC.number_of_windows_to_be(len(sitesnames) + 1))
+    WebDriverWait(driver, 60).until(EC.number_of_windows_to_be(len(sitesnames) + 1))
     driver.switch_to.window(sitewindow)
     extrawindows.clear()
     z = z + 1
